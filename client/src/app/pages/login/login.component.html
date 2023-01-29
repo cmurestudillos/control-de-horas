@@ -1,0 +1,22 @@
+<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
+  <mat-card class="box">
+      <mat-card-header>
+          <img src="../../../assets/logo.png" alt="Logo" width="64" height="64" />
+      </mat-card-header>
+      <form class="example-form" [formGroup]="loginForm" (ngSubmit)="login()">
+        <mat-card-content>
+          <mat-form-field class="example-full-width">
+            <input matInput formControlName="email" type="email" placeholder="name@example.com" required>
+          </mat-form-field>
+          <div *ngIf="loginForm.controls['email'].errors?.pattern" class="form-control-feedback">El formato es incorrecto.</div>
+          <mat-form-field class="example-full-width" appearance="fill">
+            <input matInput #input [type]="hide ? 'password' : 'text'" formControlName="password" type="password" placeholder="Contraseña...">
+            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+          </mat-form-field>
+        </mat-card-content>
+        <button mat-stroked-button color="accent" class="btn-block" type="submit">Entrar</button>
+      </form>
+    </mat-card>
+  </div>

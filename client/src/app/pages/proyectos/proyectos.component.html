@@ -1,0 +1,35 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button matTooltip="Menu" (click)="sidenav.toggle()">
+      <mat-icon>menu</mat-icon>
+  </button>
+  <span>Control de Horas</span>
+  <span class="toolbar-item-spacer"></span>
+  <button mat-icon-button matTooltip="My Account" [matMenuTriggerFor]="userAccountMenu">
+      <mat-icon>account_circle</mat-icon>
+  </button>
+  <mat-menu #userAccountMenu [overlapTrigger]="false" yPosition="below">
+      <button mat-menu-item routerLink="#">
+          <mat-icon>person</mat-icon><span>Perfil</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="logOut()">
+          <mat-icon>exit_to_app</mat-icon>Cerrar Sesión
+      </button>
+  </mat-menu>
+</mat-toolbar>
+
+<mat-sidenav-container class="app-container">
+  <mat-sidenav #sidenav mode="side" opened class="app-sidenav">
+    <mat-nav-list>
+        <a mat-list-item [routerLink]="['/tareas']"> <mat-icon matListItemIcon>apple</mat-icon>Tareas</a>
+        <a mat-list-item [routerLink]="['/clientes']"> <mat-icon matListItemIcon>apple</mat-icon>Clientes</a>
+        <a mat-list-item [routerLink]="['/proyectos']"> <mat-icon matListItemIcon>apple</mat-icon>Proyectos</a>
+        <a mat-list-item [routerLink]="['/acciones']"> <mat-icon matListItemIcon>apple</mat-icon>Acciones</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div class="app-sidenav-content">
+      Proyectos Component
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
