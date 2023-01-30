@@ -1,15 +1,11 @@
 import { Injectable } from '@angular/core';
-import {
-  HttpClient,
-  HttpHeaders,
-  HttpErrorResponse,
-} from '@angular/common/http';
-import { Router } from '@angular/router';
+import {HttpClient, HttpErrorResponse } from '@angular/common/http';
+// Formularios
+import { FormGroup } from '@angular/forms';
 // Operadores y Observables
-import { BehaviorSubject, Observable } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-// Modelo de datos
-import { User } from '../interface/User';
+import { Observable } from 'rxjs';
+// Modelo de Datos
+import { Action } from '../interface/Action';
 
 @Injectable({
   providedIn: 'root',
@@ -20,37 +16,30 @@ export class AccionesService {
   constructor(private http: HttpClient) {}
 
   // Obtener acciones
-  obtenerAcciones(): Observable<any> {
-    let api = `${this.endpoint}/api/acciones/`;
-    return this.http.get(api).pipe(
-      map((res) => {
-        return res || {};
-      }),
-      catchError(this.handleError)
-    );
+  obtenerAcciones(): Observable<Action> {
+    return this.http.get<Action>(`${this.endpoint}/api/acciones/`);
+  }
+
+  // Obtener detalle de Accion
+  obtenerAccionById(id:any): Observable<any> {
+    return this.http.get(`${this.endpoint}/api/acciones/${id}`);
   }
 
   // Crear Acción
-  createAccion(data: any): Observable<any> {
-    return this.http
-      .post(`${this.endpoint}/api/acciones`, data)
-      .pipe(catchError(this.handleError));
+  createAccion(valueForm: FormGroup): Observable<Action> {
+    const data = {nombre: valueForm.value.nombre};
+    return this.http.post<Action>(`${this.endpoint}/api/acciones`, data);
   }
 
-  eliminarAccion(id:any): Observable<any> {
-    return this.http.delete(`${this.endpoint}/api/acciones/${id}`).pipe(catchError(this.handleError));
+  // Actualizar Acción
+  actualizarAccion(id:string, valueForm: FormGroup): Observable<Action> {
+    const data = {nombre: valueForm.value.nombre};
+    return this.http.put<Action>(`${this.endpoint}/api/acciones/${id}`, data);
   }
 
-  // Error
-  handleError(error: HttpErrorResponse) {
-    let msg = '';
-    if (error.error instanceof ErrorEvent) {
-      // client error
-      msg = error.error.message;
-    } else {
-      // server error
-      msg = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    return msg;
+  // Eliminar Acción
+  eliminarAccion(id:string): Observable<Action> {
+    return this.http.delete<Action>(`${this.endpoint}/api/acciones/${id}`);
   }
+
 }

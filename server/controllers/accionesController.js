@@ -42,7 +42,7 @@ exports.crearAccion = async (req, res) => {
         }
         accion = new Accion(req.body);
         await accion.save();
-        res.status(200).send('Registro creado correctamente.');
+        res.status(200).json({msg: 'Registro creado correctamente.'});
     } catch (error) {
         res.status(500).send('Ha ocurrido un error al intentar crear el registro. Intentelo de nuevo.');
     }
@@ -50,7 +50,6 @@ exports.crearAccion = async (req, res) => {
 
 // Modificar accion
 exports.actualizarAccion = async(req, res) => {
-    // Revisar si hay errores
     const errores = validationResult(req);
     if( !errores.isEmpty() ) {
         return res.status(400).json({errores: errores.array() })
@@ -65,7 +64,7 @@ exports.actualizarAccion = async(req, res) => {
         const nuevaAccion = {};
         nuevaAccion.nombre = nombre;
         accion = await Accion.findOneAndUpdate({_id : req.params.id }, nuevaAccion, { new: true } );
-        res.json({ accion, msg: 'Registro actualizado correctamente.' });
+        res.status(200).json({msg: 'Registro actualizado correctamente.'});
     } catch (error) {
         res.status(500).send('Ha ocurrido un error al intentar modificar el registro. Intentelo de nuevo.');
     }

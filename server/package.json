@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node .",
-    "dev": "nodemon ."
+    "dev": "nodemon .",
+    "deploy": "gcloud app deploy && gcloud app browse -s controldehoras-service"
   },
   "author": "Carlos Mur",
   "license": "MIT",

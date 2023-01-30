@@ -20,6 +20,8 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatListModule} from '@angular/material/list';
 import {MatTableModule} from '@angular/material/table';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
   declarations: [],
@@ -42,7 +44,9 @@ import {MatTableModule} from '@angular/material/table';
     MatSidenavModule,
     MatDividerModule,
     MatListModule,
-    MatTableModule
+    MatTableModule,
+    MatProgressSpinnerModule,
+    MatDialogModule
   ],
   exports: [
     MatButtonModule,
@@ -61,7 +65,9 @@ import {MatTableModule} from '@angular/material/table';
     MatSidenavModule,
     MatDividerModule,
     MatListModule,
-    MatTableModule
+    MatTableModule,
+    MatProgressSpinnerModule,
+    MatDialogModule
   ]
 })
 export class MaterialModule { }

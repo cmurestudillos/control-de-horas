@@ -4,8 +4,9 @@
   </button>
   <span>Control de Horas</span>
   <span class="toolbar-item-spacer"></span>
-  <button mat-icon-button matTooltip="My Account" [matMenuTriggerFor]="userAccountMenu">
-      <mat-icon>account_circle</mat-icon>
+  <button mat-raised-button (click)="logOut()">
+    Desconectar
+    <mat-icon>exit_to_app</mat-icon>
   </button>
   <mat-menu #userAccountMenu [overlapTrigger]="false" yPosition="below">
       <button mat-menu-item routerLink="#">
@@ -20,45 +21,50 @@
 
 <mat-sidenav-container class="app-container">
   <mat-sidenav #sidenav mode="side" opened class="app-sidenav">
-    <mat-nav-list>
-        <a mat-list-item [routerLink]="['/tareas']"> <mat-icon matListItemIcon>apple</mat-icon>Tareas</a>
-        <a mat-list-item [routerLink]="['/clientes']"> <mat-icon matListItemIcon>apple</mat-icon>Clientes</a>
-        <a mat-list-item [routerLink]="['/proyectos']"> <mat-icon matListItemIcon>apple</mat-icon>Proyectos</a>
-        <a mat-list-item [routerLink]="['/acciones']"> <mat-icon matListItemIcon>apple</mat-icon>Acciones</a>
-    </mat-nav-list>
+    <app-menu-sidenav></app-menu-sidenav>
   </mat-sidenav>
   <mat-sidenav-content>
     <div class="m-2 align-middle">
       <h1>Acciones</h1>
       <hr>
-
-      <app-search-input (searchInput)="inputSearch($event)"></app-search-input>
-
-      <section class="example-container mat-elevation-z8" tabindex="0">
-
-        <table mat-table aria-label="Tabla acciones" [dataSource]="actionsArray">
-          <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns">
-            <th mat-header-cell *matHeaderCellDef>{{ column }}</th>
-            <td mat-cell *matCellDef="let row">
-              {{ row.nombre }}
-              <button class="float-end" mat-mini-fab matTooltip="Warn" color="warn" (click)="eliminarAccion(row._id)">
-                <mat-icon matListItemIcon>delete</mat-icon>
+      <div class="d-flex align-items-center">
+        <div class="flex-grow-1">
+          <app-search-input (searchInput)="inputSearch($event)"></app-search-input>
+        </div>
+        <hr class="vertical-hr">
+        <div class="p-1">
+          <form [formGroup]="formulario" (ngSubmit)="onSubmit()">
+              <mat-form-field class="no-padding me-1">
+                <input *ngIf="isSelected" matInput formControlName="nombre" type="text" placeholder="Introduce un valor..." [value]="itemSelected?.nombre">
+                <input *ngIf="!isSelected" matInput formControlName="nombre" type="text" placeholder="Introduce un valor...">
+              </mat-form-field>
+              <button *ngIf="isSelected"  class="float-end me-2" type="button" color="warn" mat-fab [disabled]="!isSelected" (click)="cancelar()">
+                <mat-icon matListItemIcon>close</mat-icon>
               </button>
-              <button class="float-end" mat-mini-fab matTooltip="Warn" color="yellow" (click)="eliminarAccion(row._id)">
+              <button *ngIf="isSelected" class="float-end me-2 bg-green" type="submit" mat-fab [disabled]="!isSelected">
                 <mat-icon matListItemIcon>edit</mat-icon>
               </button>
-            </td>
-          </ng-container>
+              <button *ngIf="!isSelected" class="float-end me-2" mat-fab matTooltip="Alta" color="primary">
+                <mat-icon matListItemIcon>add</mat-icon>
+              </button>
+          </form>
+        </div>
+        <div class="p-1">
+          <button class="float-end me-1" mat-fab matTooltip="Eliminar" color="primary" [disabled]="!isSelected" (click)="eliminarAccion(itemSelected._id)">
+            <mat-icon matListItemIcon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
-          <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell">No hay datos</td>
-          </tr>
-        </table>
-
+      <section class="example-container mat-elevation-z8" tabindex="0">
+        <mat-selection-list #acciones [multiple]="false">
+          <mat-list-option [id]="item._id" *ngFor="let item of actionsArray" [value]="item" (selectedChange)="obtenerAccionById(item._id)">
+            {{item.nombre}}
+          </mat-list-option>
+        </mat-selection-list>
       </section>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+
