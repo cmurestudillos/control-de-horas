@@ -70,7 +70,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 ::ng-deep mat-form-field > div.mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-bottom-align{
   display: none !important;
 }
-
 .vertical-hr{
   border:none;
   border-left:1px solid hsla(200, 10%, 50%,100);

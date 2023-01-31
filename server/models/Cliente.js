@@ -11,12 +11,7 @@ const clienteSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Proyecto',
         require: true
-    }, 
-    horas: {
-        type: Number,
-        required: true,
-        default: 0
-    }, 
+    } 
 });
 
 module.exports = mongoose.model('Cliente', clienteSchema);

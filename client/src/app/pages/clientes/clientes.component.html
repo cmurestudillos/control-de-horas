@@ -4,8 +4,9 @@
   </button>
   <span>Control de Horas</span>
   <span class="toolbar-item-spacer"></span>
-  <button mat-icon-button matTooltip="My Account" [matMenuTriggerFor]="userAccountMenu">
-      <mat-icon>account_circle</mat-icon>
+  <button mat-raised-button (click)="logOut()">
+    Desconectar
+    <mat-icon>exit_to_app</mat-icon>
   </button>
   <mat-menu #userAccountMenu [overlapTrigger]="false" yPosition="below">
       <button mat-menu-item routerLink="#">
@@ -23,8 +24,67 @@
     <app-menu-sidenav></app-menu-sidenav>
   </mat-sidenav>
   <mat-sidenav-content>
-    <div class="app-sidenav-content">
-      Clientes Component
+    <div class="m-2 align-middle">
+      <h1>Clientes</h1>
+      <hr>
+      <div class="d-flex align-items-center">
+        <div class="flex-grow-1">
+          <app-search-input (searchInput)="inputSearch($event)"></app-search-input>
+        </div>
+        <hr class="vertical-hr">
+        <div class="p-1">
+          <form [formGroup]="formulario" (ngSubmit)="onSubmit()">
+            <div class="d-flex flex-row">
+              <div class="p-1">
+                <mat-form-field class="me-1">
+                  <input matInput formControlName="nombre" type="text" placeholder="Introduce un valor...">
+                </mat-form-field>
+              </div>
+              <div class="p-1">
+                <mat-form-field class="me-1">
+                  <mat-label>Proyectos</mat-label>
+                  <mat-select formControlName="proyecto" name="proyecto">
+                    <mat-option *ngFor="let item of projectsArray" [value]="item._id">
+                      {{item.nombre}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="p-1">
+                <button *ngIf="isSelected" class="float-end me-2 bg-green" type="submit" mat-fab [disabled]="!isSelected">
+                  <mat-icon matListItemIcon>edit</mat-icon>
+                </button>
+              </div>
+              <div class="p-1">
+                <button *ngIf="isSelected"  class="float-end me-2" type="button" color="warn" mat-fab [disabled]="!isSelected" (click)="cancelar()">
+                  <mat-icon matListItemIcon>close</mat-icon>
+                </button>
+              </div>
+              <div class="p-1">
+                <button *ngIf="!isSelected" class="float-end me-2" mat-fab matTooltip="Alta" color="primary">
+                  <mat-icon matListItemIcon>add</mat-icon>
+                </button>
+              </div>
+              <div class="p-1">
+                <button class="float-end me-1" mat-fab matTooltip="Eliminar" color="primary" [disabled]="!isSelected" (click)="eliminarCliente(itemSelected._id)">
+                  <mat-icon matListItemIcon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <section class="example-container mat-elevation-z8" tabindex="0">
+        <mat-selection-list #acciones [multiple]="false">
+          <mat-list-option [id]="item._id" *ngFor="let item of clientsArray" [value]="item" (selectedChange)="obtenerClienteById(item._id)">
+            {{item.nombre}}
+          </mat-list-option>
+          <app-alerts *ngIf="clientsArray?.length === 0"></app-alerts>
+        </mat-selection-list>
+      </section>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+

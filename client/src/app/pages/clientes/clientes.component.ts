@@ -1,7 +1,20 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+// Formularios
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+// Operadores y Observables
+import { Subscription } from 'rxjs';
+// Modelo de Datos
+import { Client } from 'src/app/interface/Client';
+import { Project } from 'src/app/interface/Project';
 // Servicios
 import { AuthService } from 'src/app/services/auth.service';
+import { ClientesService } from 'src/app/services/clientes.service';
+import { NotificationService } from 'src/app/services/notification.service';
+import { ProyectosService } from 'src/app/services/proyectos.service';
+import { SearchService } from 'src/app/services/search.service';
+import { SubscriptionService } from 'src/app/services/subscription.service';
 
 @Component({
   selector: 'app-clientes',
@@ -9,14 +22,147 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./clientes.component.css']
 })
 export class ClientesComponent implements OnInit {
-
-
   currentUser!: any;
+  formulario!: FormGroup;
+  listClients: Client[] = [];
+  clientsArray!: Client[];
+  projectsArray!: Project[];
+  selectedValue!: string;
+  itemSelected!: Client;
+  isSelected: boolean = false;
+  private subscriptions: Subscription[] = [];
 
-  constructor(private router: Router, public authService: AuthService) {}
+  constructor(
+    public fb: FormBuilder,
+    private router: Router,
+    public authService: AuthService,
+    public searchService: SearchService,
+    public clientesService: ClientesService,
+    public proyectosService: ProyectosService,
+    private notificationService: NotificationService,
+    private subscriptionService: SubscriptionService) {
+      this.formulario = this.fb.group({
+        nombre: new FormControl('', [Validators.required]),
+        proyecto: new FormControl('', [Validators.required])
+      });
+    }
 
   ngOnInit(): void{
+    this.isSelected = false;
     this.currentUser = this.authService.getUsuario();
+    this.getClientsData();
+    this.getProjectsData();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.clearSubscriptions();
+  }
+
+  getClientsData() {
+    this.subscriptions.push(
+      this.clientesService.obtenerClientes().subscribe((data:any) => {
+        this.listClients = data.clientes
+        this.clientsArray = data.clientes;
+      })
+    )
+  }
+
+  getProjectsData() {
+    this.subscriptions.push(
+      this.proyectosService.obtenerProyectos().subscribe((data:any) => {
+        this.projectsArray = data.proyectos;
+      })
+    )
+  }
+
+  onSubmit(): void{
+    if(this.isSelected){
+      this.actualizarCliente(this.itemSelected);
+    } else {
+      this.crearCliente();
+    }
+  }
+
+  dataTableChange(evt: boolean): void {
+    if (evt) {
+      this.getClientsData();
+    }
+  }
+
+  inputSearch(search: string): void{
+    const newArray = this.searchService.searchAction(search, this.listClients);
+    this.clientsArray = newArray;
+  }
+
+
+  obtenerClienteById(id: string): void{
+    this.isSelected = true;
+    this.subscriptions.push(
+      this.clientesService.obtenerClienteById(id).subscribe((data:any) => {
+        this.itemSelected = data.cliente;
+        this.formulario.patchValue({nombre: this.itemSelected.nombre});
+        for (const iterator of this.projectsArray) {
+          if (iterator._id === this.itemSelected.proyecto) {
+            this.formulario.patchValue({proyecto: iterator._id});
+          }
+        }
+     },
+      (error: HttpErrorResponse) => {
+        const mensaje = error.error.msg;
+        this.notificationService.showErrorMessage(mensaje);
+      })
+    );
+  }
+
+  crearCliente(): void{
+    this.subscriptions.push(
+      this.clientesService.crearCliente(this.formulario).subscribe((data:any) => {
+        this.formulario.controls.nombre.reset();
+        this.formulario.controls.proyecto.reset();
+        this.dataTableChange(true);
+        this.notificationService.showSuccessMessage(data.msg);
+     },
+      (error: HttpErrorResponse) => {
+        const mensaje = error.error.msg;
+        this.notificationService.showErrorMessage(mensaje);
+      })
+    );
+  }
+
+  actualizarCliente(value: Client): void{
+    this.subscriptions.push(
+      this.clientesService.actualizarCliente(value._id, this.formulario).subscribe((data:any) => {
+        this.isSelected = false;
+        this.formulario.controls.nombre.reset();
+        this.formulario.controls.proyecto.reset();
+        this.getClientsData();
+        this.notificationService.showSuccessMessage(data.msg);
+     },
+      (error: HttpErrorResponse) => {
+        const mensaje = error.error.msg;
+        this.notificationService.showErrorMessage(mensaje);
+      })
+    );
+  }
+
+  eliminarCliente(id: string): void{
+    this.subscriptions.push(
+      this.clientesService.eliminarCliente(id).subscribe((data:any) => {
+        this.isSelected = false;
+        this.getClientsData();
+        this.notificationService.showSuccessMessage(data.msg);
+     },
+      (error: HttpErrorResponse) => {
+        const mensaje = error.error.msg;
+        this.notificationService.showErrorMessage(mensaje);
+      })
+    );
+  }
+
+  cancelar(): void{
+    this.isSelected = false;
+    this.formulario.reset();
+    this.getClientsData();
   }
 
   logOut() {

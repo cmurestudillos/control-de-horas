@@ -44,7 +44,7 @@ exports.crearCliente = async (req, res) => {
         nuevoCliente.nombre = nombre;
         nuevoCliente.proyecto = proyecto;
         await nuevoCliente.save();
-        res.status(200).send('Registro creado correctamente.');
+        res.status(200).json({msg: 'Registro creado correctamente.'});
     } catch (error) {
         res.status(500).send('Ha ocurrido un error al intentar cargar los datos. Intentelo de nuevo.');
     }
@@ -66,9 +66,8 @@ exports.actualizarCliente = async(req, res) => {
         const nuevoCliente = {};
         nuevoCliente.nombre = nombre;
         nuevoCliente.proyecto = proyecto;
-
         cliente = await Cliente.findOneAndUpdate({_id : req.params.id }, nuevoCliente, { new: true } );
-        res.json({ nuevoCliente, msg: 'Registro actualizado correctamente' });
+        res.status(200).json({msg: 'Registro actualizado correctamente.'});
     } catch (error) {
         res.status(500).send('Ha ocurrido un error al intentar cargar los datos. Intentelo de nuevo.');
     }

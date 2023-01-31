@@ -85,6 +85,7 @@ export class AccionesComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.accionesService.obtenerAccionById(id).subscribe((data:any) => {
         this.itemSelected = data.accion;
+        this.formulario.patchValue({nombre: this.itemSelected.nombre});
      },
       (error: HttpErrorResponse) => {
         const mensaje = error.error.msg;
@@ -127,6 +128,7 @@ export class AccionesComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.accionesService.eliminarAccion(id).subscribe((data:any) => {
         this.isSelected = false;
+        this.formulario.reset();
         this.getActionsData();
         this.notificationService.showSuccessMessage(data.msg);
      },
@@ -139,6 +141,7 @@ export class AccionesComponent implements OnInit, OnDestroy {
 
   cancelar(): void{
     this.isSelected = false;
+    this.formulario.reset();
     this.getActionsData();
   }
 

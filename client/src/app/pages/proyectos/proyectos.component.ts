@@ -85,6 +85,7 @@ export class ProyectosComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.proyectosService.obtenerProyectoById(id).subscribe((data:any) => {
         this.itemSelected = data.proyecto;
+        this.formulario.patchValue({nombre: this.itemSelected.nombre});
      },
       (error: HttpErrorResponse) => {
         const mensaje = error.error.msg;
@@ -96,7 +97,7 @@ export class ProyectosComponent implements OnInit, OnDestroy {
   crearProyecto(): void{
     this.subscriptions.push(
       this.proyectosService.crearProyecto(this.formulario).subscribe((data:any) => {
-        this.formulario.controls.nombre.reset();
+        this.formulario.reset();
         this.dataTableChange(true);
         this.notificationService.showSuccessMessage(data.msg);
      },
@@ -111,7 +112,7 @@ export class ProyectosComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.proyectosService.actualizarProyecto(value._id, this.formulario).subscribe((data:any) => {
         this.isSelected = false;
-        this.formulario.controls.nombre.reset();
+        this.formulario.reset();
         this.getProjectsData();
         this.notificationService.showSuccessMessage(data.msg);
      },
@@ -126,6 +127,7 @@ export class ProyectosComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.proyectosService.eliminarProyecto(id).subscribe((data:any) => {
         this.isSelected = false;
+        this.formulario.reset();
         this.getProjectsData();
         this.notificationService.showSuccessMessage(data.msg);
      },
@@ -138,6 +140,7 @@ export class ProyectosComponent implements OnInit, OnDestroy {
 
   cancelar(): void{
     this.isSelected = false;
+    this.formulario.reset();
     this.getProjectsData();
   }
 
