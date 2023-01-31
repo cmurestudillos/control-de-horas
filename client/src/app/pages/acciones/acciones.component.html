@@ -35,6 +35,7 @@
         <div class="p-1">
           <form [formGroup]="formulario" (ngSubmit)="onSubmit()">
               <mat-form-field class="no-padding me-1">
+                <mat-label>Acción:</mat-label>
                 <input matInput formControlName="nombre" type="text" placeholder="Introduce un valor...">
               </mat-form-field>
               <button *ngIf="isSelected"  class="float-end me-2" type="button" color="warn" mat-fab [disabled]="!isSelected" (click)="cancelar()">
@@ -60,7 +61,7 @@
           <mat-list-option [id]="item._id" *ngFor="let item of actionsArray" [value]="item" (selectedChange)="obtenerAccionById(item._id)">
             {{item.nombre}}
           </mat-list-option>
-          <app-alerts *ngIf="actionsArray.length === 0"></app-alerts>
+          <app-alerts *ngIf="actionsArray?.length === 0"></app-alerts>
         </mat-selection-list>
       </section>
     </div>

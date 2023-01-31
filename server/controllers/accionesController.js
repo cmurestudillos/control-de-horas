@@ -6,7 +6,7 @@ const Accion = require('../models/Accion');
 //Obtener Acciones
 exports.obtenerAcciones = async (req, res) => {
     try {
-        const acciones = await Accion.find().sort({ _id : 0 });
+        const acciones = await Accion.find().sort({ nombre: 0 });
         res.json({ acciones });
     } catch (error) {
         res.status(500).send('Ha ocurrido un error al intentar cargar los datos. Intentelo de nuevo.');

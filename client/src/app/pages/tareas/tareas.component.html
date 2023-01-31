@@ -4,18 +4,10 @@
   </button>
   <span>Control de Horas</span>
   <span class="toolbar-item-spacer"></span>
-  <button mat-icon-button matTooltip="My Account" [matMenuTriggerFor]="userAccountMenu">
-      <mat-icon>account_circle</mat-icon>
+  <button mat-raised-button (click)="logOut()">
+    Desconectar
+    <mat-icon>exit_to_app</mat-icon>
   </button>
-  <mat-menu #userAccountMenu [overlapTrigger]="false" yPosition="below">
-      <button mat-menu-item routerLink="#">
-          <mat-icon>person</mat-icon><span>Perfil</span>
-      </button>
-      <mat-divider></mat-divider>
-      <button mat-menu-item (click)="logOut()">
-          <mat-icon>exit_to_app</mat-icon>Cerrar Sesión
-      </button>
-  </mat-menu>
 </mat-toolbar>
 
 <mat-sidenav-container class="app-container">
@@ -23,8 +15,107 @@
     <app-menu-sidenav></app-menu-sidenav>
   </mat-sidenav>
   <mat-sidenav-content>
-    <div class="app-sidenav-content">
-      Tareas Component
+    <div class="m-2 align-middle">
+      <h1>Tareas</h1>
+      <hr>
+      <div class="d-flex align-items-center">
+        <div class="p-1">
+          <form [formGroup]="formulario" (ngSubmit)="onSubmit()">
+            <div class="d-flex flex-row">
+              <div class="p-1">
+                <mat-form-field appearance="fill">
+                  <mat-label>Fecha:</mat-label>
+                  <input matInput [matDatepicker]="picker" formControlName="fecha">
+                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="p-1">
+                <mat-form-field class="me-1">
+                  <mat-label>Clientes:</mat-label>
+                  <mat-select formControlName="cliente" name="cliente" (valueChange)="getClientProjects($event)">
+                    <mat-option *ngFor="let item of clientsArray" [value]="item">
+                      {{item.nombre}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="p-1">
+                <mat-form-field class="me-1">
+                  <mat-label>Proyectos:</mat-label>
+                  <mat-select formControlName="proyecto" name="proyecto">
+                    <mat-option *ngFor="let item of projectsArray" [value]="item">
+                      {{item.nombre}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="p-1">
+                <mat-form-field class="me-1">
+                  <mat-label>Acciones:</mat-label>
+                  <mat-select formControlName="accion" name="accion">
+                    <mat-option *ngFor="let item of actionsArray" [value]="item">
+                      {{item.nombre}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="p-1">
+                <mat-form-field class="me-1">
+                  <mat-label>Tiempo(min):</mat-label>
+                  <input matInput formControlName="tiempo" type="number" placeholder="Introduce un valor...">
+                </mat-form-field>
+              </div>
+              <div class="p-1">
+                <button *ngIf="isSelected" class="float-end me-2 bg-green" type="submit" mat-fab [disabled]="!isSelected">
+                  <mat-icon matListItemIcon>edit</mat-icon>
+                </button>
+              </div>
+              <div class="p-1">
+                <button *ngIf="isSelected"  class="float-end me-2" type="button" color="warn" mat-fab [disabled]="!isSelected" (click)="cancelar()">
+                  <mat-icon matListItemIcon>close</mat-icon>
+                </button>
+              </div>
+              <div class="p-1">
+                <button *ngIf="!isSelected" class="float-end me-2" mat-fab matTooltip="Alta" color="primary">
+                  <mat-icon matListItemIcon>add</mat-icon>
+                </button>
+              </div>
+              <div class="p-1">
+                <button class="float-end me-1" mat-fab matTooltip="Eliminar" color="primary" type="button" [disabled]="!isSelected" (click)="eliminarTarea(itemSelected._id)">
+                  <mat-icon matListItemIcon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="d-flex align-items-center">
+        <div class="flex-grow-1">
+          <app-search-date (searchDate)="inputSearchDate($event)"></app-search-date>
+        </div>
+        <hr class="vertical-hr">
+        <div class="flex-grow-1">
+          <app-search-input (searchInput)="inputSearch($event)"></app-search-input>
+        </div>
+      </div>
+
+      <section class="example-container-tareas mat-elevation-z8" tabindex="0">
+        <mat-selection-list #acciones [multiple]="false">
+          <mat-list-option class="border-bottom" [id]="item._id" *ngFor="let item of tasksArray" [value]="item" (selectedChange)="obtenerTareaById(item._id)">
+            <div class="d-flex">
+              <div class="flex-fill">{{item.fecha | date: 'dd/MM/yyyy'}}</div>
+              <div class="flex-fill">{{item.cliente.nombre}}</div>
+              <div class="flex-fill">{{item.proyecto.nombre}}</div>
+              <div class="flex-fill">{{item.accion.nombre}}</div>
+              <div class="flex-fill">{{item.tiempo}} (min.)</div>
+            </div>
+          </mat-list-option>
+          <app-alerts *ngIf="tasksArray?.length === 0"></app-alerts>
+        </mat-selection-list>
+      </section>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+

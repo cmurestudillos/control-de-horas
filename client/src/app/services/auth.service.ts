@@ -34,6 +34,7 @@ export class AuthService {
           const usuario = localStorage.getItem('usuario');
           if (usuario === null){
             this.currentUser = {
+              _id: res.usuario._id,
               nombre: res.usuario.nombre,
               email: res.usuario.email
             };
@@ -49,7 +50,7 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
-  getUsuario() {
+  getUsuario(){
     return localStorage.getItem('usuario');
   }
 

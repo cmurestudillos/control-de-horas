@@ -10,17 +10,17 @@ const TareaSchema = mongoose.Schema({
         ref: 'Usuario'
     },
     cliente: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.Object,
         ref: 'Cliente',
         require: true
     }, 
     proyecto: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.Object,
         ref: 'Proyecto',
         require: true
     },      
     accion: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.Object,
         ref: 'Accion',
         require: true
     },   

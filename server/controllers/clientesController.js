@@ -6,7 +6,7 @@ const Cliente = require('../models/Cliente');
 //Obtener Clientes
 exports.obtenerClientes = async (req, res) => {
     try {
-        const clientes = await Cliente.find().sort({ _id : 0 });
+        const clientes = await Cliente.find().sort({ nombre : 0 });
         res.json({ clientes });
     } catch (error) {
         res.status(500).send('Ha ocurrido un error al intentar cargar los datos. Intentelo de nuevo.');

@@ -18,7 +18,7 @@ import { SubscriptionService } from 'src/app/services/subscription.service';
 @Component({
   selector: 'app-acciones',
   templateUrl: './acciones.component.html',
-  styleUrls: ['./acciones.component.css']
+  styleUrls: []
 })
 export class AccionesComponent implements OnInit, OnDestroy {
   currentUser!: any;
@@ -76,7 +76,7 @@ export class AccionesComponent implements OnInit, OnDestroy {
   }
 
   inputSearch(search: string): void{
-    const newArray = this.searchService.searchAction(search, this.listActions);
+    const newArray = this.searchService.searchAccion(search, this.listActions);
     this.actionsArray = newArray;
   }
 

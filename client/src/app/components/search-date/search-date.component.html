@@ -1,0 +1,7 @@
+
+<mat-form-field appearance="outline">
+  <mat-label>Busqueda por fecha:</mat-label>
+  <input matInput [matDatepicker]="picker" (dateChange)="changeSearchDate($event)">
+  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>

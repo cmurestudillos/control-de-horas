@@ -67,6 +67,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   overflow: auto;
 }
 
+.example-container-tareas {
+  height: calc(71vh - 80px);
+  overflow: auto;
+}
+
 ::ng-deep mat-form-field > div.mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-bottom-align{
   display: none !important;
 }

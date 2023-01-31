@@ -17,7 +17,7 @@ import { SubscriptionService } from 'src/app/services/subscription.service';
 @Component({
   selector: 'app-proyectos',
   templateUrl: './proyectos.component.html',
-  styleUrls: ['./proyectos.component.css']
+  styleUrls: []
 })
 export class ProyectosComponent implements OnInit, OnDestroy {
   currentUser!: any;
@@ -75,7 +75,7 @@ export class ProyectosComponent implements OnInit, OnDestroy {
   }
 
   inputSearch(search: string): void{
-    const newArray = this.searchService.searchAction(search, this.listProjects);
+    const newArray = this.searchService.searchProyecto(search, this.listProjects);
     this.projectsArray = newArray;
   }
 

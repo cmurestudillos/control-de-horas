@@ -10,12 +10,14 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { MaterialModule } from '../modules/material.module';
 // Componentes
 import { SearchInputComponent } from './search-input/search-input.component';
+import { SearchDateComponent } from './search-date/search-date.component';
 import { MenuSidenavComponent } from './menu-sidenav/menu-sidenav.component';
 import { AlertsComponent } from './alerts/alerts.component';
 
 @NgModule({
   declarations: [
       SearchInputComponent,
+      SearchDateComponent,
       MenuSidenavComponent,
       AlertsComponent
     ],
@@ -29,6 +31,7 @@ import { AlertsComponent } from './alerts/alerts.component';
   ],
   exports: [
     SearchInputComponent,
+    SearchDateComponent,
     MenuSidenavComponent,
     AlertsComponent
   ]

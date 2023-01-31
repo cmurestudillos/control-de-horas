@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 // Formularios
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -19,9 +19,9 @@ import { SubscriptionService } from 'src/app/services/subscription.service';
 @Component({
   selector: 'app-clientes',
   templateUrl: './clientes.component.html',
-  styleUrls: ['./clientes.component.css']
+  styleUrls: []
 })
-export class ClientesComponent implements OnInit {
+export class ClientesComponent implements OnInit, OnDestroy {
   currentUser!: any;
   formulario!: FormGroup;
   listClients: Client[] = [];
@@ -90,7 +90,7 @@ export class ClientesComponent implements OnInit {
   }
 
   inputSearch(search: string): void{
-    const newArray = this.searchService.searchAction(search, this.listClients);
+    const newArray = this.searchService.searchCliente(search, this.listClients);
     this.clientsArray = newArray;
   }
 
@@ -102,7 +102,7 @@ export class ClientesComponent implements OnInit {
         this.itemSelected = data.cliente;
         this.formulario.patchValue({nombre: this.itemSelected.nombre});
         for (const iterator of this.projectsArray) {
-          if (iterator._id === this.itemSelected.proyecto) {
+          if (iterator._id === this.itemSelected.proyecto._id) {
             this.formulario.patchValue({proyecto: iterator._id});
           }
         }

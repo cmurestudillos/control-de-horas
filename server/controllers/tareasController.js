@@ -5,7 +5,7 @@ const { validationResult } = require('express-validator');
 // Obtener todas las tareas
 exports.obtenerTareas = async (req, res) => {
     try {
-        const tareas = await Tarea.find().sort({ fecha: -1 });
+        const tareas = await Tarea.find({usuario: req.params.usuario}).sort({ fecha: -1 });
         res.json({ tareas });
     } catch (error) {
         res.status(500).send('Ha ocurrido un error al intentar cargar los datos. Intentelo de nuevo.');
@@ -15,17 +15,13 @@ exports.obtenerTareas = async (req, res) => {
 // Obtener detalle de tarea
 exports.obtenerTareaById = async (req, res) => {
     try {
-        const existeUsuario = await Usuario.findById(req.params.id);
-        if(!existeUsuario) {
-            return res.status(404).json({msg: 'Usuario no encontrado.'})
+        let existeTarea = await Tarea.findById(req.params.id);
+        if(!existeTarea) {
+            return res.status(404).json({msg: 'No existe el registro.'});
         }
-        if(existeUsuario._id.toString() !== req.params.id ) {
-            return res.status(401).json({msg: 'No Autorizado.'});
-        }
-        const tarea = await Tarea.find({usuario: existeUsuario._id}).sort({ fecha: -1 });
+        const tarea = await Tarea.find({_id: req.params.id});
         res.json({ tarea });
     } catch (error) {
-        console.log(error)
         res.status(500).send('Ha ocurrido un error al intentar cargar los datos. Intentelo de nuevo.');
     }
 }
@@ -38,23 +34,16 @@ exports.crearTarea = async (req, res) => {
     }
     
     try {
-        const existeUsuario = await Usuario.findById(req.params.id);
-        if(!existeUsuario) {
-            return res.status(404).json({msg: 'Usuario no encontrado.'})
+        const { fecha, usuario, cliente, proyecto, accion, tiempo } = req.body;
+        let tarea = await Tarea.findOne({ fecha, usuario, cliente, proyecto, accion, tiempo });
+        if(tarea) {
+            return res.status(400).json({ msg: 'El registro ya existe.' });
         }
-        if(existeUsuario._id.toString() !== req.params.id ) {
-            return res.status(401).json({msg: 'No Autorizado.'});
-        }
-        const { fecha, usuario, cliente, proyecto, accion } = req.body;
-        let existeTarea = await Tarea.findOne({ fecha, usuario, cliente, proyecto, accion });
-        if(existeTarea) {
-            return res.status(409).json({ msg: 'La tarea existe. No se puede repetir.' });
-        }
-        const tarea = new Tarea(req.body);
+        tarea = new Tarea(req.body);
         await tarea.save();
-        res.json({ tarea, msg: 'Registro creado correctamente.' });
+        res.status(200).json({msg: 'Registro creado correctamente.'});
     } catch (error) {
-        res.status(500).send('Ha ocurrido un error al intentar cargar los datos. Intentelo de nuevo.');
+        res.status(500).send('Ha ocurrido un error al intentar generar el registro. Intentelo de nuevo.');
     }
 }
 
@@ -78,14 +67,13 @@ exports.actualizarTarea = async (req, res ) => {
         nuevaTarea.accion = accion;
         nuevaTarea.tiempo = tiempo;
         tarea = await Tarea.findOneAndUpdate({_id : req.params.id }, nuevaTarea, { new: true } );
-        res.json({ tarea, msg:"Registro actualizado correctamente." });
+        res.status(200).json({msg: 'Registro actualizado correctamente.'})
     } catch (error) {
-        console.log(error);
-        res.status(500).send('Ha ocurrido un error al intentar cargar los datos. Intentelo de nuevo.');
+        res.status(500).send('Ha ocurrido un error al intentar actualizar el registro. Intentelo de nuevo.');
     }
 }
 
-// Eliminar tarea
+// Eliminar Tarea
 exports.eliminarTarea = async (req, res) => {
     try {
         let tarea = await Tarea.findById(req.params.id);
@@ -93,8 +81,8 @@ exports.eliminarTarea = async (req, res) => {
             return res.status(404).json({msg: 'No existe esa tarea.'});
         }
         await Tarea.findOneAndRemove({_id: req.params.id});
-        res.json({msg: 'TaRegistro eliminado correctamente.'})
+        res.json({msg: 'Registro eliminado correctamente.'})
     } catch (error) {
-        res.status(500).send('Ha ocurrido un error al intentar cargar los datos. Intentelo de nuevo.');
+        res.status(500).send('Ha ocurrido un error al intentar eliminar el registro. Intentelo de nuevo.');
     }
 }

@@ -8,7 +8,7 @@ const clienteSchema = mongoose.Schema({
         trim: true
     },
     proyecto: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.Object,
         ref: 'Proyecto',
         require: true
     } 
