@@ -4,8 +4,9 @@
   </button>
   <span>Control de Horas</span>
   <span class="toolbar-item-spacer"></span>
-  <button mat-icon-button matTooltip="My Account" [matMenuTriggerFor]="userAccountMenu">
-      <mat-icon>account_circle</mat-icon>
+  <button mat-raised-button (click)="logOut()">
+    Desconectar
+    <mat-icon>exit_to_app</mat-icon>
   </button>
   <mat-menu #userAccountMenu [overlapTrigger]="false" yPosition="below">
       <button mat-menu-item routerLink="#">
@@ -23,8 +24,48 @@
     <app-menu-sidenav></app-menu-sidenav>
   </mat-sidenav>
   <mat-sidenav-content>
-    <div class="app-sidenav-content">
-      Proyectos Component
+    <div class="m-2 align-middle">
+      <h1>Proyectos</h1>
+      <hr>
+      <div class="d-flex align-items-center">
+        <div class="flex-grow-1">
+          <app-search-input (searchInput)="inputSearch($event)"></app-search-input>
+        </div>
+        <hr class="vertical-hr">
+        <div class="p-1">
+          <form [formGroup]="formulario" (ngSubmit)="onSubmit()">
+              <mat-form-field class="no-padding me-1">
+                <input *ngIf="isSelected" matInput formControlName="nombre" type="text" placeholder="Introduce un valor..." [value]="itemSelected?.nombre">
+                <input *ngIf="!isSelected" matInput formControlName="nombre" type="text" placeholder="Introduce un valor...">
+              </mat-form-field>
+              <button *ngIf="isSelected"  class="float-end me-2" type="button" color="warn" mat-fab [disabled]="!isSelected" (click)="cancelar()">
+                <mat-icon matListItemIcon>close</mat-icon>
+              </button>
+              <button *ngIf="isSelected" class="float-end me-2 bg-green" type="submit" mat-fab [disabled]="!isSelected">
+                <mat-icon matListItemIcon>edit</mat-icon>
+              </button>
+              <button *ngIf="!isSelected" class="float-end me-2" mat-fab matTooltip="Alta" color="primary">
+                <mat-icon matListItemIcon>add</mat-icon>
+              </button>
+          </form>
+        </div>
+        <div class="p-1">
+          <button class="float-end me-1" mat-fab matTooltip="Eliminar" color="primary" [disabled]="!isSelected" (click)="eliminarProyecto(itemSelected._id)">
+            <mat-icon matListItemIcon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <section class="example-container mat-elevation-z8" tabindex="0">
+        <mat-selection-list #acciones [multiple]="false">
+          <mat-list-option [id]="item._id" *ngFor="let item of projectsArray" [value]="item" (selectedChange)="obtenerProyectoById(item._id)">
+            {{item.nombre}}
+          </mat-list-option>
+          <app-alerts *ngIf="projectsArray?.length === 0"></app-alerts>
+        </mat-selection-list>
+      </section>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+

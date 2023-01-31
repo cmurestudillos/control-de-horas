@@ -61,6 +61,7 @@
           <mat-list-option [id]="item._id" *ngFor="let item of actionsArray" [value]="item" (selectedChange)="obtenerAccionById(item._id)">
             {{item.nombre}}
           </mat-list-option>
+          <app-alerts *ngIf="actionsArray.length === 0"></app-alerts>
         </mat-selection-list>
       </section>
     </div>

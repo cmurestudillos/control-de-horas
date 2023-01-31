@@ -11,11 +11,13 @@ import { MaterialModule } from '../modules/material.module';
 // Componentes
 import { SearchInputComponent } from './search-input/search-input.component';
 import { MenuSidenavComponent } from './menu-sidenav/menu-sidenav.component';
+import { AlertsComponent } from './alerts/alerts.component';
 
 @NgModule({
   declarations: [
       SearchInputComponent,
-      MenuSidenavComponent
+      MenuSidenavComponent,
+      AlertsComponent
     ],
   imports: [
     CommonModule,
@@ -27,7 +29,8 @@ import { MenuSidenavComponent } from './menu-sidenav/menu-sidenav.component';
   ],
   exports: [
     SearchInputComponent,
-    MenuSidenavComponent
+    MenuSidenavComponent,
+    AlertsComponent
   ]
 })
 export class ComponentsModule { }

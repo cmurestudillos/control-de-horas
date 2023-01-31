@@ -105,7 +105,7 @@ export class AccionesComponent implements OnInit, OnDestroy {
         this.notificationService.showErrorMessage(mensaje);
       })
     );
-      }
+  }
 
 
   actualizarAccion(value: Action): void{
