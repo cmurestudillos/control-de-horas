@@ -63,7 +63,8 @@ export class AuthService {
 
   cerrarSesion() {
     let removeToken = localStorage.removeItem('token');
-    if (removeToken == null) {
+    let removeUser = localStorage.removeItem('usuario');
+    if (removeToken == null && removeUser == null) {
       this.router.navigate(['login']);
     }
   }

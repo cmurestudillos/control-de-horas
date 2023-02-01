@@ -19,7 +19,7 @@ export class AccionesService {
 
   // Obtener acciones
   obtenerAcciones(): Observable<Action> {
-    return this.http.get<Action>(`${this.endpoint}/acciones/`);
+    return this.http.get<Action>(`${this.endpoint}/acciones`);
   }
 
   // Obtener detalle de Accion
