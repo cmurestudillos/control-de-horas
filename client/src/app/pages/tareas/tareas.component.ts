@@ -18,7 +18,7 @@ import { TareasService } from 'src/app/pages/tareas/services/tareas.service';
 import { ClientesService } from 'src/app/pages/clientes/services/clientes.service';
 import { ProyectosService } from 'src/app/pages/proyectos/services/proyectos.service';
 import { AccionesService } from 'src/app/pages/acciones/services/acciones.service';
-
+import { ExportService } from 'src/app/services/export.service';
 
 @Component({
   selector: 'app-tareas',
@@ -47,6 +47,7 @@ export class TareasComponent implements OnInit, OnDestroy {
     public proyectosService: ProyectosService,
     public accionesService: AccionesService,
     private notificationService: NotificationService,
+    private exportService: ExportService,
     private subscriptionService: SubscriptionService) {
       this.formulario = this.fb.group({
         fecha: new FormControl('', [Validators.required]),
@@ -227,6 +228,10 @@ export class TareasComponent implements OnInit, OnDestroy {
     this.isSelected = false;
     this.formulario.reset();
     this.getTasksData();
+  }
+
+  exportToExcel(): void {
+    this.exportService.exportToExcel(this.tasksArray)
   }
 
 }
