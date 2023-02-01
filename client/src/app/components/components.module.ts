@@ -13,14 +13,16 @@ import { SearchInputComponent } from './search-input/search-input.component';
 import { SearchDateComponent } from './search-date/search-date.component';
 import { MenuSidenavComponent } from './menu-sidenav/menu-sidenav.component';
 import { AlertsComponent } from './alerts/alerts.component';
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
       SearchInputComponent,
       SearchDateComponent,
       MenuSidenavComponent,
-      AlertsComponent
-    ],
+      AlertsComponent,
+      HeaderComponent
+,    ],
   imports: [
     CommonModule,
     BrowserAnimationsModule,
@@ -33,7 +35,8 @@ import { AlertsComponent } from './alerts/alerts.component';
     SearchInputComponent,
     SearchDateComponent,
     MenuSidenavComponent,
-    AlertsComponent
+    AlertsComponent,
+    HeaderComponent
   ]
 })
 export class ComponentsModule { }

@@ -4,19 +4,7 @@
   </button>
   <span>Control de Horas</span>
   <span class="toolbar-item-spacer"></span>
-  <button mat-raised-button (click)="logOut()">
-    Desconectar
-    <mat-icon>exit_to_app</mat-icon>
-  </button>
-  <mat-menu #userAccountMenu [overlapTrigger]="false" yPosition="below">
-      <button mat-menu-item routerLink="#">
-          <mat-icon>person</mat-icon><span>Perfil</span>
-      </button>
-      <mat-divider></mat-divider>
-      <button mat-menu-item (click)="logOut()">
-          <mat-icon>exit_to_app</mat-icon>Cerrar Sesión
-      </button>
-  </mat-menu>
+  <app-header></app-header>
 </mat-toolbar>
 
 <mat-sidenav-container class="app-container">
@@ -58,7 +46,7 @@
 
       <section class="example-container mat-elevation-z8" tabindex="0">
         <mat-selection-list #acciones [multiple]="false">
-          <mat-list-option [id]="item._id" *ngFor="let item of actionsArray" [value]="item" (selectedChange)="obtenerAccionById(item._id)">
+          <mat-list-option class="border-bottom" [id]="item._id" *ngFor="let item of actionsArray" [value]="item" (selectedChange)="obtenerAccionById(item._id)">
             {{item.nombre}}
           </mat-list-option>
           <app-alerts *ngIf="actionsArray?.length === 0"></app-alerts>

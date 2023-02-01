@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 // Formularios
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -10,7 +9,7 @@ import { Action } from 'src/app/interface/Action';
 // Servicios
 import { AuthService } from 'src/app/services/auth.service';
 import { SearchService } from 'src/app/services/search.service';
-import { AccionesService } from 'src/app/services/acciones.service';
+import { AccionesService } from 'src/app/pages/acciones/services/acciones.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { SubscriptionService } from 'src/app/services/subscription.service';
 
@@ -31,7 +30,6 @@ export class AccionesComponent implements OnInit, OnDestroy {
 
   constructor(
     public fb: FormBuilder,
-    private router: Router,
     public authService: AuthService,
     public searchService: SearchService,
     public accionesService: AccionesService,
@@ -143,12 +141,6 @@ export class AccionesComponent implements OnInit, OnDestroy {
     this.isSelected = false;
     this.formulario.reset();
     this.getActionsData();
-  }
-
-  logOut() {
-    this.currentUser = null;
-    this.authService.cerrarSesion();
-    this.router.navigate(['/login']);
   }
 
 }

@@ -1,3 +1,6 @@
+.mat-mdc-card{
+  box-shadow: none !important;
+}
 .login-wrapper {
   height: auto;
 	padding: 40px 20px;
@@ -15,7 +18,7 @@
   top: 0;
   opacity: 1;
   float: left;
-  padding: 60px 50px 40px 50px;
+  /* padding: 60px 50px 40px 50px; */
   width: 100%;
   background: #fff;
   border-radius: 10px;

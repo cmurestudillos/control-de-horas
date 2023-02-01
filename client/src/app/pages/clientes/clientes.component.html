@@ -4,10 +4,7 @@
   </button>
   <span>Control de Horas</span>
   <span class="toolbar-item-spacer"></span>
-  <button mat-raised-button (click)="logOut()">
-    Desconectar
-    <mat-icon>exit_to_app</mat-icon>
-  </button>
+  <app-header></app-header>
 </mat-toolbar>
 
 <mat-sidenav-container class="app-container">
@@ -69,7 +66,7 @@
 
       <section class="example-container mat-elevation-z8" tabindex="0">
         <mat-selection-list #acciones [multiple]="false">
-          <mat-list-option [id]="item._id" *ngFor="let item of clientsArray" [value]="item" (selectedChange)="obtenerClienteById(item._id)">
+          <mat-list-option class="border-bottom" [id]="item._id" *ngFor="let item of clientsArray" [value]="item" (selectedChange)="obtenerClienteById(item._id)">
             <div class="d-flex">
               <div class="flex-fill">{{item.nombre}}</div>
               <div class="flex-fill">{{item.proyecto.nombre}}</div>

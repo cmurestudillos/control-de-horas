@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+// API endpoint
+import url from '../api/endpoint';
 // Operadores y Observables
 import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -11,7 +13,7 @@ import { User } from '../interface/User';
   providedIn: 'root',
 })
 export class AuthService {
-  endpoint: string = 'http://localhost:4000';
+  endpoint: string = url.api;
   headers = new HttpHeaders().set('Authorization', 'application/json');
   currentUser!: User;
   public isShowSideNav: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -28,7 +30,7 @@ export class AuthService {
   }
 
   iniciarSesion(user: User) {
-    return this.http.post<any>(`${this.endpoint}/api/auth`, user).subscribe((res: any) => {
+    return this.http.post<any>(`${this.endpoint}/auth`, user).subscribe((res: any) => {
         localStorage.setItem('token', res.token);
         this.getUserProfile(res.usuario._id).subscribe((res) => {
           const usuario = localStorage.getItem('usuario');
@@ -60,20 +62,19 @@ export class AuthService {
   }
 
   cerrarSesion() {
-    let removeUser = localStorage.removeItem('usuario');
     let removeToken = localStorage.removeItem('token');
-    if (removeToken == null && removeUser == null) {
+    if (removeToken == null) {
       this.router.navigate(['login']);
     }
   }
 
   usuarioAutenticado() {
-    return this.http.get(`${this.endpoint}/api/auth`);
+    return this.http.get(`${this.endpoint}/auth`);
   }
 
   // User profile
   getUserProfile(id: any): Observable<any> {
-    let api = `${this.endpoint}/api/usuarios/${id}`;
+    let api = `${this.endpoint}/usuarios/${id}`;
     return this.http.get(api, { headers: this.headers }).pipe(
       map((res) => {
         return res || {};

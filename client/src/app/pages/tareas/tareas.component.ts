@@ -1,6 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 // Formularios
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 // Operadores y Observables
@@ -9,21 +8,22 @@ import { Subscription } from 'rxjs';
 import { Task } from 'src/app/interface/Task';
 import { Client } from 'src/app/interface/Client';
 import { Project } from 'src/app/interface/Project';
+import { Action } from 'src/app/interface/Action';
 // Servicios
 import { AuthService } from 'src/app/services/auth.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { SearchService } from 'src/app/services/search.service';
 import { SubscriptionService } from 'src/app/services/subscription.service';
-import { TareasService } from 'src/app/services/tareas.service';
-import { ClientesService } from 'src/app/services/clientes.service';
-import { ProyectosService } from 'src/app/services/proyectos.service';
-import { AccionesService } from 'src/app/services/acciones.service';
-import { Action } from 'src/app/interface/Action';
+import { TareasService } from 'src/app/pages/tareas/services/tareas.service';
+import { ClientesService } from 'src/app/pages/clientes/services/clientes.service';
+import { ProyectosService } from 'src/app/pages/proyectos/services/proyectos.service';
+import { AccionesService } from 'src/app/pages/acciones/services/acciones.service';
+
 
 @Component({
   selector: 'app-tareas',
   templateUrl: './tareas.component.html',
-  styleUrls: ['./tareas.component.css']
+  styleUrls: []
 })
 export class TareasComponent implements OnInit, OnDestroy {
   currentUser!: any;
@@ -40,7 +40,6 @@ export class TareasComponent implements OnInit, OnDestroy {
 
   constructor(
     public fb: FormBuilder,
-    private router: Router,
     public authService: AuthService,
     public searchService: SearchService,
     public tareasService: TareasService,
@@ -61,21 +60,21 @@ export class TareasComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void{
     this.isSelected = false;
-    this.getUserId();
-    this.getTasksData();
-    this.getClientsData();
-    this.getProjectsData();
-    this.getActionsData();
+    this.getData();
   }
 
   ngOnDestroy(): void {
     this.subscriptionService.clearSubscriptions();
   }
 
-  getUserId():void{
+  getData():void{
     this.currentUser = this.authService.getUsuario();
     let idUser = JSON.parse(this.currentUser);
-    this.userId = idUser._id;
+    this.userId = idUser?._id;
+    this.getTasksData();
+    this.getClientsData();
+    this.getProjectsData();
+    this.getActionsData();
   }
 
   getTasksData() {
@@ -228,12 +227,6 @@ export class TareasComponent implements OnInit, OnDestroy {
     this.isSelected = false;
     this.formulario.reset();
     this.getTasksData();
-  }
-
-  logOut() {
-    this.currentUser = null;
-    this.authService.cerrarSesion();
-    this.router.navigate(['/login']);
   }
 
 }

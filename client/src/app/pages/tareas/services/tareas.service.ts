@@ -1,28 +1,31 @@
 import { Injectable } from '@angular/core';
 import {HttpClient } from '@angular/common/http';
+// API endpoint
+import url from 'src/app/api/endpoint';
 // Formularios
 import { FormGroup } from '@angular/forms';
 // Operadores y Observables
 import { Observable } from 'rxjs';
 // Modelo de Datos
-import { Task } from '../interface/Task';
+import { Task } from '../../../interface/Task';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class TareasService {
-  endpoint: string = 'http://localhost:4000';
+  endpoint: string = url.api;
 
   constructor(private http: HttpClient) {}
 
   // Obtener Tareas
   obtenerTareas(usuario: string): Observable<Task> {
-    return this.http.get<Task>(`${this.endpoint}/api/tareas/usuario/${usuario}`);
+    return this.http.get<Task>(`${this.endpoint}/tareas/usuario/${usuario}`);
   }
 
   // Obtener detalle de una Tarea
   obtenerTareaById(id:string): Observable<any> {
-    return this.http.get(`${this.endpoint}/api/tareas/${id}`);
+    return this.http.get(`${this.endpoint}/tareas/${id}`);
   }
 
   // Crear Tarea
@@ -35,7 +38,7 @@ export class TareasService {
       accion: valueForm.value.accion,
       tiempo: valueForm.value.tiempo
     };
-    return this.http.post<Task>(`${this.endpoint}/api/tareas`, data);
+    return this.http.post<Task>(`${this.endpoint}/tareas`, data);
   }
 
   // Actualizar Tarea
@@ -48,12 +51,12 @@ export class TareasService {
       accion: valueForm.value.accion,
       tiempo: valueForm.value.tiempo
     };
-    return this.http.put<Task>(`${this.endpoint}/api/tareas/${id}`, data);
+    return this.http.put<Task>(`${this.endpoint}/tareas/${id}`, data);
   }
 
   // Eliminar Tarea
   eliminarTarea(id:string): Observable<Task> {
-    return this.http.delete<Task>(`${this.endpoint}/api/tareas/${id}`);
+    return this.http.delete<Task>(`${this.endpoint}/tareas/${id}`);
   }
 
 }

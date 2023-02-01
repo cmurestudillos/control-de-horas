@@ -10,7 +10,7 @@ import { Project } from 'src/app/interface/Project';
 // Servicios
 import { AuthService } from 'src/app/services/auth.service';
 import { NotificationService } from 'src/app/services/notification.service';
-import { ProyectosService } from 'src/app/services/proyectos.service';
+import { ProyectosService } from 'src/app/pages/proyectos/services/proyectos.service';
 import { SearchService } from 'src/app/services/search.service';
 import { SubscriptionService } from 'src/app/services/subscription.service';
 
@@ -142,12 +142,6 @@ export class ProyectosComponent implements OnInit, OnDestroy {
     this.isSelected = false;
     this.formulario.reset();
     this.getProjectsData();
-  }
-
-  logOut() {
-    this.currentUser = null;
-    this.authService.cerrarSesion();
-    this.router.navigate(['/login']);
   }
 
 }
