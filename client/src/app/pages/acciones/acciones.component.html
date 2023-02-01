@@ -26,13 +26,13 @@
                 <mat-label>Acción:</mat-label>
                 <input matInput formControlName="nombre" type="text" placeholder="Introduce un valor...">
               </mat-form-field>
-              <button *ngIf="isSelected"  class="float-end me-2" type="button" color="warn" mat-fab [disabled]="!isSelected" (click)="cancelar()">
+              <button *ngIf="isSelected"  class="float-end me-2 botonF5" type="button" mat-fab [disabled]="!isSelected" (click)="cancelar()">
                 <mat-icon matListItemIcon>close</mat-icon>
               </button>
-              <button *ngIf="isSelected" class="float-end me-2 bg-green" type="submit" mat-fab [disabled]="!isSelected">
+              <button *ngIf="isSelected" class="float-end me-2 botonF6" type="submit" mat-fab [disabled]="!isSelected">
                 <mat-icon matListItemIcon>edit</mat-icon>
               </button>
-              <button *ngIf="!isSelected" class="float-end me-2" mat-fab matTooltip="Alta" color="primary">
+              <button *ngIf="!isSelected" class="float-end me-2 botonF2" mat-fab matTooltip="Alta">
                 <mat-icon matListItemIcon>add</mat-icon>
               </button>
           </form>

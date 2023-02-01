@@ -42,24 +42,19 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .botonF2{
-  background:#2196F3;
-  margin-bottom:85px;
-  transition:0.5s;
+  background:#2196F3 !important;
 }
 .botonF3{
-  background:#673AB7;
-  margin-bottom:130px;
-  transition:0.7s;
+  background:#673AB7 !important;
 }
 .botonF4{
-  background:#009688;
-  margin-bottom:175px;
-  transition:0.9s;
+  background:#009688 !important;
 }
 .botonF5{
-  background:#FF5722;
-  margin-bottom:220px;
-  transition:0.99s;
+  background:#FF5722 !important;
+}
+.botonF6{
+  background:#ffc107 !important;
 }
 
 .example-container {

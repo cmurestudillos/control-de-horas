@@ -40,17 +40,17 @@
                 </mat-form-field>
               </div>
               <div class="p-1">
-                <button *ngIf="isSelected" class="float-end me-2 bg-green" type="submit" mat-fab [disabled]="!isSelected">
+                <button *ngIf="isSelected" class="float-end me-2 botonF6" type="submit" mat-fab [disabled]="!isSelected">
                   <mat-icon matListItemIcon>edit</mat-icon>
                 </button>
               </div>
               <div class="p-1">
-                <button *ngIf="isSelected"  class="float-end me-2" type="button" color="warn" mat-fab [disabled]="!isSelected" (click)="cancelar()">
+                <button *ngIf="isSelected"  class="float-end me-2 botonF5" type="button" mat-fab [disabled]="!isSelected" (click)="cancelar()">
                   <mat-icon matListItemIcon>close</mat-icon>
                 </button>
               </div>
               <div class="p-1">
-                <button *ngIf="!isSelected" class="float-end me-2" mat-fab matTooltip="Alta" color="primary">
+                <button *ngIf="!isSelected" class="float-end me-2 botonF2" mat-fab matTooltip="Alta">
                   <mat-icon matListItemIcon>add</mat-icon>
                 </button>
               </div>
