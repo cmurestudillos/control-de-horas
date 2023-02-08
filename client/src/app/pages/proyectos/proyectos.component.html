@@ -24,7 +24,7 @@
           <form [formGroup]="formulario" (ngSubmit)="onSubmit()">
               <mat-form-field class="no-padding me-1">
                 <mat-label>Proyecto</mat-label>
-                <input matInput formControlName="nombre" type="text" placeholder="Introduce un valor...">
+                <input matInput formControlName="nombre" type="text" placeholder="Introduce un valor..." [required]="isRequired">
               </mat-form-field>
               <button *ngIf="isSelected"  class="float-end me-2 botonF5" type="button" mat-fab [disabled]="!isSelected" (click)="cancelar()">
                 <mat-icon matListItemIcon>close</mat-icon>

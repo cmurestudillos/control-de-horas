@@ -36,6 +36,7 @@ export class TareasComponent implements OnInit, OnDestroy {
   itemSelected!: Task;
   isSelected!: boolean;
   userId!: string;
+  isRequired: boolean = false;
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -50,12 +51,12 @@ export class TareasComponent implements OnInit, OnDestroy {
     private exportService: ExportService,
     private subscriptionService: SubscriptionService) {
       this.formulario = this.fb.group({
-        fecha: new FormControl('', [Validators.required]),
-        usuario: new FormControl('', [Validators.required]),
-        cliente: new FormControl('', [Validators.required]),
-        proyecto: new FormControl('', [Validators.required]),
-        accion: new FormControl('', [Validators.required]),
-        tiempo: new FormControl('', [Validators.required])
+        fecha: new FormControl(''),
+        usuario: new FormControl(''),
+        cliente: new FormControl(''),
+        proyecto: new FormControl(''),
+        accion: new FormControl(''),
+        tiempo: new FormControl('')
       });
     }
 
@@ -186,12 +187,14 @@ export class TareasComponent implements OnInit, OnDestroy {
   crearTarea(): void{
     this.subscriptions.push(
       this.tareasService.crearTarea(this.formulario).subscribe((data:any) => {
+        this.isRequired = false;
         this.isSelected = false;
         this.formulario.reset();
         this.dataTableChange(true);
         this.notificationService.showSuccessMessage(data.msg);
      },
       (error: HttpErrorResponse) => {
+        this.isRequired = true;
         const mensaje = error.error;
         this.notificationService.showErrorMessage(mensaje);
       })
@@ -205,6 +208,7 @@ export class TareasComponent implements OnInit, OnDestroy {
         this.notificationService.showSuccessMessage(data.msg);
      },
       (error: HttpErrorResponse) => {
+        this.isRequired = true;
         const mensaje = error.error;
         this.notificationService.showErrorMessage(mensaje);
       })
@@ -225,6 +229,7 @@ export class TareasComponent implements OnInit, OnDestroy {
   }
 
   cancelar(): void{
+    this.isRequired = false;
     this.isSelected = false;
     this.formulario.reset();
     this.getTasksData();

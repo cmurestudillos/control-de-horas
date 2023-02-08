@@ -1,8 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 // Formulario
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 // Operadores y Observables
 import { Subscription } from 'rxjs';
 // Modelo de datos
@@ -26,18 +25,18 @@ export class ProyectosComponent implements OnInit, OnDestroy {
   projectsArray!: Project[];
   itemSelected!: Project;
   isSelected: boolean = false;
+  isRequired: boolean = false;
   private subscriptions: Subscription[] = [];
 
   constructor(
     public fb: FormBuilder,
-    private router: Router,
     public authService: AuthService,
     public searchService: SearchService,
     public proyectosService: ProyectosService,
     private notificationService: NotificationService,
     private subscriptionService: SubscriptionService) {
       this.formulario = this.fb.group({
-        nombre: new FormControl('', [Validators.required])
+        nombre: new FormControl('')
       });
     }
 
@@ -97,12 +96,14 @@ export class ProyectosComponent implements OnInit, OnDestroy {
   crearProyecto(): void{
     this.subscriptions.push(
       this.proyectosService.crearProyecto(this.formulario).subscribe((data:any) => {
+        this.isRequired = false;
         this.formulario.reset();
         this.dataTableChange(true);
         this.notificationService.showSuccessMessage(data.msg);
      },
       (error: HttpErrorResponse) => {
-        const mensaje = error.error.msg;
+        this.isRequired = true;
+        const mensaje = error.error.toString();
         this.notificationService.showErrorMessage(mensaje);
       })
     );
@@ -111,13 +112,15 @@ export class ProyectosComponent implements OnInit, OnDestroy {
   actualizarProyecto(value: Project): void{
     this.subscriptions.push(
       this.proyectosService.actualizarProyecto(value._id, this.formulario).subscribe((data:any) => {
+        this.isRequired = false;
         this.isSelected = false;
         this.formulario.reset();
         this.getProjectsData();
         this.notificationService.showSuccessMessage(data.msg);
      },
       (error: HttpErrorResponse) => {
-        const mensaje = error.error.msg;
+        this.isRequired = true;
+        const mensaje = error.error.toString();
         this.notificationService.showErrorMessage(mensaje);
       })
     );
@@ -126,19 +129,21 @@ export class ProyectosComponent implements OnInit, OnDestroy {
   eliminarProyecto(id: string): void{
     this.subscriptions.push(
       this.proyectosService.eliminarProyecto(id).subscribe((data:any) => {
+        this.isRequired = false;
         this.isSelected = false;
         this.formulario.reset();
         this.getProjectsData();
         this.notificationService.showSuccessMessage(data.msg);
      },
       (error: HttpErrorResponse) => {
-        const mensaje = error.error.msg;
+        const mensaje = error.error.toString();
         this.notificationService.showErrorMessage(mensaje);
       })
     );
   }
 
   cancelar(): void{
+    this.isRequired = false;
     this.isSelected = false;
     this.formulario.reset();
     this.getProjectsData();

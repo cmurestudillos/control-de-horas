@@ -1,8 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
 // Formularios
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 // Operadores y Observables
 import { Subscription } from 'rxjs';
 // Modelo de Datos
@@ -30,11 +29,11 @@ export class ClientesComponent implements OnInit, OnDestroy {
   selectedValue!: string;
   itemSelected!: Client;
   isSelected: boolean = false;
+  isRequired: boolean = false;
   private subscriptions: Subscription[] = [];
 
   constructor(
     public fb: FormBuilder,
-    private router: Router,
     public authService: AuthService,
     public searchService: SearchService,
     public clientesService: ClientesService,
@@ -42,8 +41,8 @@ export class ClientesComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private subscriptionService: SubscriptionService) {
       this.formulario = this.fb.group({
-        nombre: new FormControl('', [Validators.required]),
-        proyecto: new FormControl('', [Validators.required])
+        nombre: new FormControl(''),
+        proyecto: new FormControl('')
       });
     }
 
@@ -117,13 +116,14 @@ export class ClientesComponent implements OnInit, OnDestroy {
   crearCliente(): void{
     this.subscriptions.push(
       this.clientesService.crearCliente(this.formulario).subscribe((data:any) => {
-        this.formulario.controls.nombre.reset();
-        this.formulario.controls.proyecto.reset();
+        this.isRequired = false;
+        this.formulario.reset();
         this.dataTableChange(true);
         this.notificationService.showSuccessMessage(data.msg);
      },
       (error: HttpErrorResponse) => {
-        const mensaje = error.error.msg;
+        this.isRequired = true;
+        const mensaje = error.error.toString();
         this.notificationService.showErrorMessage(mensaje);
       })
     );
@@ -132,14 +132,15 @@ export class ClientesComponent implements OnInit, OnDestroy {
   actualizarCliente(value: Client): void{
     this.subscriptions.push(
       this.clientesService.actualizarCliente(value._id, this.formulario).subscribe((data:any) => {
+        this.isRequired = false;
         this.isSelected = false;
-        this.formulario.controls.nombre.reset();
-        this.formulario.controls.proyecto.reset();
+        this.formulario.reset();
         this.getClientsData();
         this.notificationService.showSuccessMessage(data.msg);
      },
       (error: HttpErrorResponse) => {
-        const mensaje = error.error.msg;
+        this.isRequired = true;
+        const mensaje = error.error.toString();
         this.notificationService.showErrorMessage(mensaje);
       })
     );
@@ -148,18 +149,20 @@ export class ClientesComponent implements OnInit, OnDestroy {
   eliminarCliente(id: string): void{
     this.subscriptions.push(
       this.clientesService.eliminarCliente(id).subscribe((data:any) => {
+        this.isRequired = false;
         this.isSelected = false;
         this.getClientsData();
         this.notificationService.showSuccessMessage(data.msg);
      },
       (error: HttpErrorResponse) => {
-        const mensaje = error.error.msg;
+        const mensaje = error.error.toString();
         this.notificationService.showErrorMessage(mensaje);
       })
     );
   }
 
   cancelar(): void{
+    this.isRequired = false;
     this.isSelected = false;
     this.formulario.reset();
     this.getClientsData();

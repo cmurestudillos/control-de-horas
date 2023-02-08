@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 // Formularios
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 // Observables y Operadores
 import { Subscription } from 'rxjs';
 // Modelo de Datos
@@ -12,7 +12,6 @@ import { SearchService } from 'src/app/services/search.service';
 import { AccionesService } from 'src/app/pages/acciones/services/acciones.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { SubscriptionService } from 'src/app/services/subscription.service';
-
 
 @Component({
   selector: 'app-acciones',
@@ -26,6 +25,7 @@ export class AccionesComponent implements OnInit, OnDestroy {
   actionsArray!: Action[];
   itemSelected!: Action;
   isSelected: boolean = false;
+  isRequired: boolean = false;
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -36,7 +36,7 @@ export class AccionesComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private subscriptionService: SubscriptionService) {
       this.formulario = this.fb.group({
-        nombre: new FormControl('', [Validators.required])
+        nombre: new FormControl('')
       });
     }
 
@@ -95,12 +95,14 @@ export class AccionesComponent implements OnInit, OnDestroy {
   crearAccion(): void{
     this.subscriptions.push(
       this.accionesService.createAccion(this.formulario).subscribe((data:any) => {
-        this.formulario.controls.nombre.reset();
+        this.isRequired = false;
+        this.formulario.reset();
         this.dataTableChange(true);
         this.notificationService.showSuccessMessage(data.msg);
      },
       (error: HttpErrorResponse) => {
-        const mensaje = error.error.msg;
+        this.isRequired = true;
+        const mensaje = error.error.toString();
         this.notificationService.showErrorMessage(mensaje);
       })
     );
@@ -111,12 +113,14 @@ export class AccionesComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.accionesService.actualizarAccion(value._id, this.formulario).subscribe((data:any) => {
         this.isSelected = false;
-        this.formulario.controls.nombre.reset();
+        this.isRequired = false;
+        this.formulario.reset();
         this.getActionsData();
         this.notificationService.showSuccessMessage(data.msg);
      },
       (error: HttpErrorResponse) => {
-        const mensaje = error.error.msg;
+        this.isRequired = true;
+        const mensaje = error.error.toString();
         this.notificationService.showErrorMessage(mensaje);
       })
     );
@@ -131,13 +135,14 @@ export class AccionesComponent implements OnInit, OnDestroy {
         this.notificationService.showSuccessMessage(data.msg);
      },
       (error: HttpErrorResponse) => {
-        const mensaje = error.error.msg;
+        const mensaje = error.error.toString();
         this.notificationService.showErrorMessage(mensaje);
       })
     );
   }
 
   cancelar(): void{
+    this.isRequired = false;
     this.isSelected = false;
     this.formulario.reset();
     this.getActionsData();

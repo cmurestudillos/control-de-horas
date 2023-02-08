@@ -27,7 +27,7 @@
               <div class="p-1">
                 <mat-form-field appearance="fill">
                   <mat-label>Fecha:</mat-label>
-                  <input matInput [matDatepicker]="picker" formControlName="fecha">
+                  <input matInput [matDatepicker]="picker" formControlName="fecha" [required]="isRequired">
                   <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
@@ -35,7 +35,7 @@
               <div class="p-1">
                 <mat-form-field class="me-1">
                   <mat-label>Clientes:</mat-label>
-                  <mat-select formControlName="cliente" name="cliente" (valueChange)="getClientProjects($event)">
+                  <mat-select formControlName="cliente" name="cliente" (valueChange)="getClientProjects($event)" [required]="isRequired">
                     <mat-option *ngFor="let item of clientsArray" [value]="item">
                       {{item.nombre}}
                     </mat-option>
@@ -45,7 +45,7 @@
               <div class="p-1">
                 <mat-form-field class="me-1">
                   <mat-label>Proyectos:</mat-label>
-                  <mat-select formControlName="proyecto" name="proyecto">
+                  <mat-select formControlName="proyecto" name="proyecto" [required]="isRequired">
                     <mat-option *ngFor="let item of projectsArray" [value]="item">
                       {{item.nombre}}
                     </mat-option>
@@ -55,7 +55,7 @@
               <div class="p-1">
                 <mat-form-field class="me-1">
                   <mat-label>Acciones:</mat-label>
-                  <mat-select formControlName="accion" name="accion">
+                  <mat-select formControlName="accion" name="accion" [required]="isRequired">
                     <mat-option *ngFor="let item of actionsArray" [value]="item">
                       {{item.nombre}}
                     </mat-option>
@@ -65,7 +65,7 @@
               <div class="p-1">
                 <mat-form-field class="me-1">
                   <mat-label>Tiempo(min):</mat-label>
-                  <input matInput formControlName="tiempo" type="number" placeholder="Introduce un valor...">
+                  <input matInput formControlName="tiempo" type="number" placeholder="Introduce un valor..." [required]="isRequired">
                 </mat-form-field>
               </div>
               <div class="p-1">
