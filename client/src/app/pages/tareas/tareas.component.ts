@@ -29,7 +29,7 @@ export class TareasComponent implements OnInit, OnDestroy {
   currentUser!: any;
   formulario!: FormGroup;
   listTasks: Task[] = [];
-  tasksArray!: Task[];
+  tasksArray: Task[] = [];
   clientsArray!: Client[];
   projectsArray!: Project[];
   actionsArray!: Action[];
@@ -71,12 +71,14 @@ export class TareasComponent implements OnInit, OnDestroy {
 
   getData():void{
     this.currentUser = this.authService.getUsuario();
-    let idUser = JSON.parse(this.currentUser);
-    this.userId = idUser?._id;
-    this.getTasksData();
-    this.getClientsData();
-    this.getProjectsData();
-    this.getActionsData();
+    if(this.currentUser !== null){
+      let idUser = JSON.parse(this.currentUser);
+      this.userId = idUser?._id;
+      this.getTasksData();
+      this.getClientsData();
+      this.getProjectsData();
+      this.getActionsData();
+    }
   }
 
   getTasksData() {
